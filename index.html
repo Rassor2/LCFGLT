@@ -33,6 +33,8 @@
             pointer-events: none;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
             will-change: transform;
+            left: 0;
+            top: 0;
         }
 
         .title {
@@ -78,10 +80,8 @@
         const beers = [];
         const emojis = ['🍺', '🍻', '🍺', '🍻', '🍺'];
 
-        // Calculer le nombre de bières selon la surface de l'écran
         function calculateBeerCount() {
             const area = window.innerWidth * window.innerHeight;
-            // 1 bière par 30 000 pixels² (ajuste la concentration ici)
             return Math.max(15, Math.floor(area / 30000));
         }
 
@@ -93,11 +93,12 @@
             const size = 30 + Math.random() * 30;
             beer.style.fontSize = size + 'px';
             
+            // Position ABSOLUE via transform uniquement (left/top fixés à 0)
             const x = Math.random() * (window.innerWidth - size);
             const y = Math.random() * (window.innerHeight - size);
             
-            beer.style.left = x + 'px';
-            beer.style.top = y + 'px';
+            // Appliquer la position initiale via transform
+            beer.style.transform = `translate(${x}px, ${y}px)`;
             
             container.appendChild(beer);
             
@@ -126,11 +127,11 @@
                 b.x += b.vx;
                 b.y += b.vy;
                 
-                // Rebond sur les bords
+                // Rebord sur les bords avec coordonnées absolues
                 if (b.x <= 0) {
                     b.x = 0;
                     b.vx = Math.abs(b.vx);
-                } else if (b.x >= w - b.size) {
+                } else if (b.x + b.size >= w) {
                     b.x = w - b.size;
                     b.vx = -Math.abs(b.vx);
                 }
@@ -138,23 +139,22 @@
                 if (b.y <= 0) {
                     b.y = 0;
                     b.vy = Math.abs(b.vy);
-                } else if (b.y >= h - b.size) {
+                } else if (b.y + b.size >= h) {
                     b.y = h - b.size;
                     b.vy = -Math.abs(b.vy);
                 }
                 
+                // Application directe de la position absolue
                 b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
             }
             
             requestAnimationFrame(animate);
         }
 
-        // Gérer le redimensionnement
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                // Recalculer et ajuster le nombre de bières
                 const targetCount = calculateBeerCount();
                 const currentCount = beers.length;
                 
