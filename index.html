@@ -13,7 +13,7 @@
 
         body {
             overflow: hidden;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #1a3a1a 60%, #0d2d0d 100%);
             height: 100vh;
             width: 100vw;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,11 +42,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #f5c518;
+            color: #39ff14;
             font-size: clamp(2rem, 8vw, 6rem);
             font-weight: 900;
             text-align: center;
-            text-shadow: 0 0 20px rgba(245, 197, 24, 0.6), 0 0 40px rgba(245, 197, 24, 0.3);
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3);
             letter-spacing: 0.1em;
             z-index: 10;
             animation: glow 2s ease-in-out infinite alternate;
@@ -57,15 +57,15 @@
             top: 62%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(57, 255, 20, 0.5);
             font-size: clamp(0.8rem, 2vw, 1.2rem);
             text-align: center;
             z-index: 10;
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 20px rgba(245, 197, 24, 0.6), 0 0 40px rgba(245, 197, 24, 0.3); }
-            to { text-shadow: 0 0 30px rgba(245, 197, 24, 0.8), 0 0 60px rgba(245, 197, 24, 0.5), 0 0 80px rgba(245, 197, 24, 0.3); }
+            from { text-shadow: 0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3); }
+            to { text-shadow: 0 0 30px rgba(57, 255, 20, 0.8), 0 0 60px rgba(57, 255, 20, 0.5), 0 0 80px rgba(57, 255, 20, 0.3); }
         }
     </style>
 </head>
@@ -93,11 +93,9 @@
             const size = 30 + Math.random() * 30;
             beer.style.fontSize = size + 'px';
             
-            // Position ABSOLUE via transform uniquement (left/top fixés à 0)
             const x = Math.random() * (window.innerWidth - size);
             const y = Math.random() * (window.innerHeight - size);
             
-            // Appliquer la position initiale via transform
             beer.style.transform = `translate(${x}px, ${y}px)`;
             
             container.appendChild(beer);
@@ -127,7 +125,6 @@
                 b.x += b.vx;
                 b.y += b.vy;
                 
-                // Rebord sur les bords avec coordonnées absolues
                 if (b.x <= 0) {
                     b.x = 0;
                     b.vx = Math.abs(b.vx);
@@ -144,7 +141,6 @@
                     b.vy = -Math.abs(b.vy);
                 }
                 
-                // Application directe de la position absolue
                 b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
             }
             
