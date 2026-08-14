@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCFGLT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .beer {
+            position: absolute;
+            font-size: 40px;
+            user-select: none;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+            will-change: transform;
+        }
+
+        .title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f5c518;
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 900;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(245, 197, 24, 0.6), 0 0 40px rgba(245, 197, 24, 0.3);
+            letter-spacing: 0.1em;
+            z-index: 10;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            position: absolute;
+            top: 62%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            text-align: center;
+            z-index: 10;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(245, 197, 24, 0.6), 0 0 40px rgba(245, 197, 24, 0.3); }
+            to { text-shadow: 0 0 30px rgba(245, 197, 24, 0.8), 0 0 60px rgba(245, 197, 24, 0.5), 0 0 80px rgba(245, 197, 24, 0.3); }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="title">LCFGLT</div>
+        <div class="subtitle">🍺 Landing Page 🍺</div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const beers = [];
+        const emojis = ['🍺', '🍻', '🍺', '🍻', '🍺'];
+
+        // Calculer le nombre de bières selon la surface de l'écran
+        function calculateBeerCount() {
+            const area = window.innerWidth * window.innerHeight;
+            // 1 bière par 30 000 pixels² (ajuste la concentration ici)
+            return Math.max(15, Math.floor(area / 30000));
+        }
+
+        function createBeer() {
+            const beer = document.createElement('div');
+            beer.className = 'beer';
+            beer.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const size = 30 + Math.random() * 30;
+            beer.style.fontSize = size + 'px';
+            
+            const x = Math.random() * (window.innerWidth - size);
+            const y = Math.random() * (window.innerHeight - size);
+            
+            beer.style.left = x + 'px';
+            beer.style.top = y + 'px';
+            
+            container.appendChild(beer);
+            
+            return {
+                el: beer,
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 4,
+                vy: (Math.random() - 0.5) * 4,
+                size: size
+            };
+        }
+
+        function initBeers() {
+            const count = calculateBeerCount();
+            for (let i = 0; i < count; i++) {
+                beers.push(createBeer());
+            }
+        }
+
+        function animate() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            
+            for (const b of beers) {
+                b.x += b.vx;
+                b.y += b.vy;
+                
+                // Rebond sur les bords
+                if (b.x <= 0) {
+                    b.x = 0;
+                    b.vx = Math.abs(b.vx);
+                } else if (b.x >= w - b.size) {
+                    b.x = w - b.size;
+                    b.vx = -Math.abs(b.vx);
+                }
+                
+                if (b.y <= 0) {
+                    b.y = 0;
+                    b.vy = Math.abs(b.vy);
+                } else if (b.y >= h - b.size) {
+                    b.y = h - b.size;
+                    b.vy = -Math.abs(b.vy);
+                }
+                
+                b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Gérer le redimensionnement
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Recalculer et ajuster le nombre de bières
+                const targetCount = calculateBeerCount();
+                const currentCount = beers.length;
+                
+                if (targetCount > currentCount) {
+                    for (let i = currentCount; i < targetCount; i++) {
+                        beers.push(createBeer());
+                    }
+                } else if (targetCount < currentCount) {
+                    for (let i = currentCount - 1; i >= targetCount; i--) {
+                        beers[i].el.remove();
+                        beers.pop();
+                    }
+                }
+            }, 200);
+        });
+
+        initBeers();
+        animate();
+    </script>
+</body>
+</html>
