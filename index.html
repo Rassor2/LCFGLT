@@ -27,7 +27,7 @@
             overflow: hidden;
         }
 
-        .beer {
+        .frog {
             position: absolute;
             font-size: 40px;
             user-select: none;
@@ -38,27 +38,34 @@
             top: 0;
         }
 
-        .curve-text {
+        .curve-container {
             position: absolute;
-            top: 28%;
+            top: 25%;
             left: 50%;
             transform: translateX(-50%);
-            color: #39ff14;
-            font-size: clamp(1rem, 3vw, 2rem);
-            text-align: center;
-            text-shadow: 0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3);
-            letter-spacing: 0.2em;
             z-index: 10;
-            animation: glow 2s ease-in-out infinite alternate;
+            cursor: pointer;
+        }
+
+        .curve-container svg text {
+            font-family: 'UnifrakturMaguntia', serif;
+            font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+            fill: #39ff14;
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3);
+        }
+
+        .curve-container svg text:hover {
+            fill: #5fff3f;
+            filter: drop-shadow(0 0 15px rgba(95, 255, 63, 0.8));
         }
 
         .title {
             position: absolute;
-            top: 50%;
+            top: 48%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: #39ff14;
-            font-size: clamp(2rem, 8vw, 6rem);
+            font-size: clamp(2.5rem, 9vw, 7rem);
             font-weight: 900;
             text-align: center;
             text-shadow: 0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3);
@@ -69,7 +76,7 @@
 
         .subtitle {
             position: absolute;
-            top: 62%;
+            top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: rgba(57, 255, 20, 0.5);
@@ -82,51 +89,421 @@
             from { text-shadow: 0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3); }
             to { text-shadow: 0 0 30px rgba(57, 255, 20, 0.8), 0 0 60px rgba(57, 255, 20, 0.5), 0 0 80px rgba(57, 255, 20, 0.3); }
         }
+
+        /* MODAL CODE */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #0d1f0d 0%, #1a3a1a 100%);
+            border: 2px solid #39ff14;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.3);
+            min-width: 320px;
+            max-width: 90vw;
+        }
+
+        .modal h2 {
+            color: #39ff14;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+        }
+
+        .modal .number-display {
+            color: rgba(57, 255, 20, 0.7);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .modal input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #39ff14;
+            color: #39ff14;
+            padding: 12px 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            outline: none;
+            width: 200px;
+            font-family: 'UnifrakturMaguntia', serif;
+            letter-spacing: 0.3em;
+        }
+
+        .modal input:focus {
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+        }
+
+        .modal button {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #1a3a1a, #0d2d0d);
+            border: 2px solid #39ff14;
+            color: #39ff14;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'UnifrakturMaguntia', serif;
+            transition: all 0.2s;
+        }
+
+        .modal button:hover {
+            background: #39ff14;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+        }
+
+        .modal .error {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        .modal .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: rgba(57, 255, 20, 0.6);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* DASHBOARD */
+        .dashboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #1a3a1a 60%, #0d2d0d 100%);
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .dashboard-header h1 {
+            color: #39ff14;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+        }
+
+        .dashboard-header .close-dash {
+            background: none;
+            border: 2px solid #39ff14;
+            color: #39ff14;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'UnifrakturMaguntia', serif;
+        }
+
+        .dashboard-header .close-dash:hover {
+            background: #39ff14;
+            color: #0a0a0a;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 15px 30px;
+            border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+        }
+
+        .dashboard-tabs button {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(57, 255, 20, 0.4);
+            color: rgba(57, 255, 20, 0.7);
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'UnifrakturMaguntia', serif;
+            transition: all 0.2s;
+        }
+
+        .dashboard-tabs button.active {
+            background: rgba(57, 255, 20, 0.2);
+            border-color: #39ff14;
+            color: #39ff14;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+        }
+
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        /* CALENDRIER */
+        .calendar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header h2 {
+            color: #39ff14;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(57, 255, 20, 0.5);
+            color: #39ff14;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'UnifrakturMaguntia', serif;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(57, 255, 20, 0.2);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(57, 255, 20, 0.3);
+        }
+
+        .calendar-day-header {
+            color: rgba(57, 255, 20, 0.7);
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(57, 255, 20, 0.15);
+            border-radius: 6px;
+            padding: 8px;
+            min-height: 80px;
+            color: rgba(57, 255, 20, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            border: none;
+        }
+
+        .calendar-day-number {
+            color: #39ff14;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .calendar-event {
+            background: rgba(57, 255, 20, 0.15);
+            border-left: 2px solid #39ff14;
+            padding: 2px 6px;
+            margin: 2px 0;
+            font-size: 0.75rem;
+            border-radius: 3px;
+            color: rgba(57, 255, 20, 0.9);
+        }
+
+        .calendar-event .event-number {
+            color: #39ff14;
+            font-weight: bold;
+        }
+
+        /* IMPORT EXCEL */
+        .import-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(57, 255, 20, 0.3);
+            border-radius: 12px;
+        }
+
+        .import-section h3 {
+            color: #39ff14;
+            margin-bottom: 15px;
+        }
+
+        .import-section input[type="file"] {
+            display: none;
+        }
+
+        .import-section .file-label {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px dashed rgba(57, 255, 20, 0.5);
+            color: rgba(57, 255, 20, 0.7);
+            padding: 20px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'UnifrakturMaguntia', serif;
+            transition: all 0.2s;
+        }
+
+        .import-section .file-label:hover {
+            border-color: #39ff14;
+            color: #39ff14;
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        .import-section .file-info {
+            color: rgba(57, 255, 20, 0.5);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="container">
-        <svg class="curve-text" viewBox="0 0 500 100" style="width: clamp(300px, 60vw, 600px); height: auto;">
-            <defs>
-                <path id="curve" d="M 50,80 Q 250,10 450,80" fill="transparent"/>
-            </defs>
-            <text fill="#39ff14" font-size="24" text-anchor="middle" font-family="'UnifrakturMaguntia', serif">
-                <textPath href="#curve" startOffset="50%">
-                    4 - 80 - 103 - 104 - 133
-                </textPath>
-            </text>
-        </svg>
+        <!-- Texte courbé avec numéros cliquables -->
+        <div class="curve-container" id="curveContainer">
+            <svg viewBox="0 0 600 120" style="width: clamp(350px, 65vw, 650px); height: auto;">
+                <defs>
+                    <path id="curve" d="M 30,100 Q 300,0 570,100" fill="transparent"/>
+                </defs>
+                <text id="curveText">
+                    <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                        <tspan class="num-link" data-num="4">4</tspan>
+                        <tspan class="sep"> - </tspan>
+                        <tspan class="num-link" data-num="80">80</tspan>
+                        <tspan class="sep"> - </tspan>
+                        <tspan class="num-link" data-num="103">103</tspan>
+                        <tspan class="sep"> - </tspan>
+                        <tspan class="num-link" data-num="104">104</tspan>
+                        <tspan class="sep"> - </tspan>
+                        <tspan class="num-link" data-num="133">133</tspan>
+                    </textPath>
+                </text>
+            </svg>
+        </div>
+
         <div class="title">LCFGLT</div>
         <div class="subtitle">🐸 Landing Page 🐸</div>
     </div>
 
+    <!-- MODAL CODE -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <h2>CODE D'ACCÈS</h2>
+            <div class="number-display" id="numberDisplay">N° --</div>
+            <input type="password" id="codeInput" maxlength="10" placeholder="•••" autocomplete="off">
+            <div class="error" id="errorMsg"></div>
+            <button id="submitCode">VALIDER</button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <h1>🐸 DASHBOARD</h1>
+            <button class="close-dash" id="closeDashboard">RETOUR</button>
+        </div>
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" data-tab="calendar">CALENDRIER</button>
+        </div>
+        <div class="dashboard-content">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h2 id="calendarMonth">Août 2026</h2>
+                    <div class="calendar-nav">
+                        <button id="prevMonth">◀</button>
+                        <button id="nextMonth">▶</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Généré en JS -->
+                </div>
+
+                <!-- Import Excel -->
+                <div class="import-section">
+                    <h3>📥 Importer un fichier Excel</h3>
+                    <label for="excelFile" class="file-label">
+                        Cliquez ou déposez un fichier .xlsx / .csv
+                    </label>
+                    <input type="file" id="excelFile" accept=".xlsx,.xls,.csv">
+                    <div class="file-info" id="fileInfo">
+                        Aucun fichier sélectionné — logique SQL à coder plus tard
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ===== GRENOUILLES =====
         const container = document.getElementById('container');
-        const beers = [];
+        const frogs = [];
         const emojis = ['🐸', '🐸', '🐸'];
 
-        function calculateBeerCount() {
+        function calculateFrogCount() {
             const area = window.innerWidth * window.innerHeight;
             return Math.max(15, Math.floor(area / 30000));
         }
 
-        function createBeer() {
-            const beer = document.createElement('div');
-            beer.className = 'beer';
-            beer.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        function createFrog() {
+            const frog = document.createElement('div');
+            frog.className = 'frog';
+            frog.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             
             const size = 30 + Math.random() * 30;
-            beer.style.fontSize = size + 'px';
+            frog.style.fontSize = size + 'px';
             
             const x = Math.random() * (window.innerWidth - size);
             const y = Math.random() * (window.innerHeight - size);
             
-            beer.style.transform = `translate(${x}px, ${y}px)`;
-            
-            container.appendChild(beer);
+            frog.style.transform = `translate(${x}px, ${y}px)`;
+            container.appendChild(frog);
             
             return {
-                el: beer,
+                el: frog,
                 x: x,
                 y: y,
                 vx: (Math.random() - 0.5) * 4,
@@ -135,10 +512,10 @@
             };
         }
 
-        function initBeers() {
-            const count = calculateBeerCount();
+        function initFrogs() {
+            const count = calculateFrogCount();
             for (let i = 0; i < count; i++) {
-                beers.push(createBeer());
+                frogs.push(createFrog());
             }
         }
 
@@ -146,7 +523,7 @@
             const w = window.innerWidth;
             const h = window.innerHeight;
             
-            for (const b of beers) {
+            for (const b of frogs) {
                 b.x += b.vx;
                 b.y += b.vy;
                 
@@ -176,24 +553,185 @@
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                const targetCount = calculateBeerCount();
-                const currentCount = beers.length;
+                const targetCount = calculateFrogCount();
+                const currentCount = frogs.length;
                 
                 if (targetCount > currentCount) {
                     for (let i = currentCount; i < targetCount; i++) {
-                        beers.push(createBeer());
+                        frogs.push(createFrog());
                     }
                 } else if (targetCount < currentCount) {
                     for (let i = currentCount - 1; i >= targetCount; i--) {
-                        beers[i].el.remove();
-                        beers.pop();
+                        frogs[i].el.remove();
+                        frogs.pop();
                     }
                 }
             }, 200);
         });
 
-        initBeers();
+        initFrogs();
         animate();
+
+        // ===== MODAL CODE =====
+        const modalOverlay = document.getElementById('modalOverlay');
+        const codeInput = document.getElementById('codeInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const numberDisplay = document.getElementById('numberDisplay');
+        let currentNumber = null;
+
+        // Clic sur les numéros
+        document.querySelectorAll('.num-link').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentNumber = el.getAttribute('data-num');
+                numberDisplay.textContent = `N° ${currentNumber}`;
+                errorMsg.textContent = '';
+                codeInput.value = '';
+                modalOverlay.classList.add('active');
+                setTimeout(() => codeInput.focus(), 100);
+            });
+        });
+
+        // Fermer modal
+        document.getElementById('closeModal').addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        // Valider code
+        document.getElementById('submitCode').addEventListener('click', validateCode);
+        codeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateCode();
+        });
+
+        function validateCode() {
+            const code = codeInput.value;
+            // Tous les codes = 0 pour l'instant
+            if (code === '0') {
+                modalOverlay.classList.remove('active');
+                openDashboard(currentNumber);
+            } else {
+                errorMsg.textContent = 'Code invalide';
+                codeInput.value = '';
+                codeInput.focus();
+            }
+        }
+
+        // ===== DASHBOARD =====
+        const dashboard = document.getElementById('dashboard');
+
+        function openDashboard(number) {
+            dashboard.classList.add('active');
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        document.getElementById('closeDashboard').addEventListener('click', () => {
+            dashboard.classList.remove('active');
+        });
+
+        // ===== CALENDRIER =====
+        let currentMonth = 7; // Août (0-indexed)
+        let currentYear = 2026;
+        const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                           'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        const dayNames = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+        // Événements communs (tous les numéros)
+        const events = [
+            { day: 15, month: 7, year: 2026, nums: [4, 80, 103, 104, 133], label: 'Réunion' },
+            { day: 22, month: 7, year: 2026, nums: [80, 103], label: 'Point hebdo' },
+            { day: 28, month: 7, year: 2026, nums: [4, 133], label: 'Sync' },
+            { day: 5, month: 8, year: 2026, nums: [4, 80, 103, 104, 133], label: 'Comité' },
+            { day: 12, month: 8, year: 2026, nums: [104, 133], label: 'Briefing' },
+        ];
+
+        function generateCalendar(month, year) {
+            const grid = document.getElementById('calendarGrid');
+            const monthLabel = document.getElementById('calendarMonth');
+            monthLabel.textContent = `${monthNames[month]} ${year}`;
+            
+            grid.innerHTML = '';
+            
+            // En-têtes jours
+            dayNames.forEach(d => {
+                const el = document.createElement('div');
+                el.className = 'calendar-day-header';
+                el.textContent = d;
+                grid.appendChild(el);
+            });
+            
+            // Premier jour du mois
+            const firstDay = new Date(year, month, 1).getDay();
+            // Ajuster pour commencer lundi
+            const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+            
+            // Jours du mois
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Cases vides avant le 1er
+            for (let i = 0; i < startOffset; i++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day empty';
+                grid.appendChild(el);
+            }
+            
+            // Jours
+            for (let d = 1; d <= daysInMonth; d++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day';
+                
+                const dayNum = document.createElement('div');
+                dayNum.className = 'calendar-day-number';
+                dayNum.textContent = d;
+                el.appendChild(dayNum);
+                
+                // Événements du jour
+                events.forEach(ev => {
+                    if (ev.day === d && ev.month === month && ev.year === year) {
+                        const evEl = document.createElement('div');
+                        evEl.className = 'calendar-event';
+                        evEl.innerHTML = `<span class="event-number">[${ev.nums.join(',')}]</span> ${ev.label}`;
+                        el.appendChild(evEl);
+                    }
+                });
+                
+                grid.appendChild(el);
+            }
+        }
+
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        // ===== IMPORT EXCEL =====
+        const excelFile = document.getElementById('excelFile');
+        const fileInfo = document.getElementById('fileInfo');
+
+        excelFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileInfo.textContent = `Fichier: ${file.name} (${(file.size / 1024).toFixed(1)} Ko) — logique SQL à venir`;
+            }
+        });
     </script>
 </body>
 </html>
